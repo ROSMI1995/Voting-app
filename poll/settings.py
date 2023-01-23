@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'users',
     'pollapp'
 ]
+AUTH_USER_MODEL = 'users.Profile'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

@@ -1,7 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from . forms import RegisterUserForm, RegisterChangeForm
 
 
 
@@ -26,18 +27,22 @@ def LoginView(request):
 
 def SignupView(request):
 	if request.method == "POST":
-		form = UserCreationForm(request.POST)
+		form = RegisterChangeForm(request.POST)
 		if form.is_valid():
 			form.save()
 			username = form.cleaned_data['username']
-			password = form.cleaned_data['password1']
+			password = form.cleaned_data['password']
+			
 			user =authenticate(request,username=username, password=password)
 			login(request, user)
 			messages.success(request, ("Registration Successfull"))
 			return redirect('home')
+			#def form_valid(self,  form):
+				#form.instance.user = self.request.user
+				#return super().form_valid(form)
 
 	else:
-		form = UserCreationForm()
+		form = RegisterChangeForm()
 
 
 
