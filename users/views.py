@@ -1,50 +1,53 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from . forms import RegisterUserForm, RegisterChangeForm
-
-
-
+from users.forms import SignUpForm, UserLoginForm
+from users.models import MyUser
+from django.views import View
 
 def LoginView(request):
-	if request.method == "POST":
-		username = request.POST.get('username')
-		password = request.POST.get('password')
-		user =authenticate(request,username=username, password=password)
-		if user is not None:
-			login(request, user)
-			return redirect('home')
+    context ={}
+    if request.method == "POST":
+        form=UserLoginForm(request.POST)
+        if form.is_valid():
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+            user=authenticate(request, email=email, password=password)
 
-		else:
-			messages.success(request, ("Invalid Login Credentials!!!"))
-			return redirect('login')
+            if user is not None:
+                login(request, user)
+                return redirect('home')
+        else:
+            form=UserLoginForm()
+            context['login_form']=form
+            messages.success(request, ("Invalid Login Credentials!!!"))
+    return render(request, 'register/login.html', context)
 
-	else:
-		return render(request, 'register/login.html', {})
-
-
-
-def SignupView(request):
-	if request.method == "POST":
-		form = RegisterChangeForm(request.POST)
-		if form.is_valid():
-			form.save()
-			username = form.cleaned_data['username']
-			password = form.cleaned_data['password']
-			
-			user =authenticate(request,username=username, password=password)
-			login(request, user)
-			messages.success(request, ("Registration Successfull"))
-			return redirect('home')
-			#def form_valid(self,  form):
-				#form.instance.user = self.request.user
-				#return super().form_valid(form)
-
-	else:
-		form = RegisterChangeForm()
+def LogOut(request):
+    logout(request)
+    return redirect('login')
 
 
+ 
 
-	return render(request, 'register/signup.html', {'form':form})
+class register(View):
+    form_class = SignUpForm
+    initial = {'key': 'value'}
+    template_name = 'register/signup.html'
 
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            form.save()
+
+            email = form.cleaned_data.get('email')
+            messages.success(request, f'Account created for {email}')
+
+            return redirect(to='home')
+
+        return render(request, self.template_name, {'form': form})

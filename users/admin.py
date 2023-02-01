@@ -1,20 +1,26 @@
 from django.contrib import admin
-from django.contrib.auth import get_user_model
-from django.contrib.auth.admin import UserAdmin
-from . forms import RegisterUserForm, RegisterChangeForm
-from .models import Profile
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from users.models import MyUser
 
 
-# Register your models here.
-class MyUserAdmin(UserAdmin):
-	add_form = RegisterUserForm
-	form = RegisterChangeForm
-	model = Profile
-	list_display = ['username','name','phone']
+class MyUserAdmin(BaseUserAdmin):
+	list_display = ('email','name','phone','date_joined','last_login','is_admin','is_active')
+	search_fields =  ('email','name')
+	readonly_fields = ('date_joined','last_login')
 
-	fieldsets = UserAdmin.fieldsets + (
-            (None, {'fields': ('name','phone')}),
-    ) 
-	
+	filter_horizontal =()
+	list_filter=('last_login',)
 
-admin.site.register(Profile, MyUserAdmin)
+	fieldsets = ()
+
+	add_fieldsets=(
+		(None,{
+			'classes':('wide'),
+			'fields':('email','name','phone','password1','password2'),
+			}),)
+
+	ordering =('email',)
+
+admin.site.register(MyUser,MyUserAdmin)
+
+

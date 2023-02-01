@@ -1,1 +1,15 @@
-<h1>Home Page</h1>
+{% extends "base.html" %}
+
+{% block title %}Homepage{% endblock %}
+
+{% block content %}
+{% for poll in polls %}
+<li class="list-group-item">
+    <strong>{{ poll.question }}</strong>
+    <span class="pull-right">
+        <a href="{% url 'vote' poll.id %}" class="btn btn-info btn-xs">Vote</a> &nbsp;
+        <a href="{% url 'results' poll.id %}" class="btn btn-default btn-xs">View Results</a> &nbsp;
+    </span>
+</li>
+{% endfor %}
+{% endblock %}
