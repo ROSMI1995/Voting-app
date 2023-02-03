@@ -2,10 +2,15 @@
 
 {% block title %}Vote{% endblock %}
 
-{% block content %}<div class="panel-body">
+{% block content %}
+<div class="text-right">
+    <a class ="btn btn-primary btn-sm mb-3" href ="{% url 'home' %}">Back To Polls</a>
+</div>
+
+<div class="panel-body">
     <div class="row">
         <div class="col-lg-12">
-            <h2>{{ poll.question }}</h2>
+            <h2 class="text-capitalize"l>{{ poll.question }}</h2>
         </div>
     </div>
 
@@ -15,22 +20,25 @@
 
             <form method="POST">
                 {% csrf_token %}
-                <div class="form-group">
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="poll" value="option1">
-                            {{ poll.option_one }}
-                        </label> &nbsp;
-                        <label>
-                            <input type="radio" name="poll" value="option2">
-                            {{ poll.option_two }}
-                        </label> &nbsp;
-                        <label>
-                            <input type="radio" name="poll" value="option3">
-                            {{ poll.option_three }}
-                        </label> &nbsp;
-                    </div>
+
+                <div class="form-check text-capitalize">
+                  <input type="radio" name="poll" value="option1 ">
+                                    {{ poll.option_one }}
+                  <label class="form-check-label" for="flexRadioDefault1"> </label>
                 </div>
+                <div class="form-check text-capitalize">
+                  <input type="radio" name="poll" value="option2">
+                                    {{ poll.option_two }}
+                  <label class="form-check-label" for="flexRadioDefault1"> </label>
+                </div>
+                <div class="form-check text-capitalize">
+                  <input type="radio" name="poll" value="option3">
+                                    {{ poll.option_three }}
+                  <label class="form-check-label" for="flexRadioDefault1"> </label>
+                </div>
+
+
+
 
                 <hr />
 
@@ -39,6 +47,8 @@
                 </button>
             </form>
         </div>
+
     </div>
+
 </div>
 {% endblock %}

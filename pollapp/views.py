@@ -16,8 +16,9 @@ def create(request):
     if request.method == 'POST':
         form = CreatePollForm(request.POST)
         if form.is_valid():
-        	form.save()
-        	return redirect('home')
+            form.name=request.user
+            form.save()
+            return redirect('home')
     else:
         form = CreatePollForm()
 

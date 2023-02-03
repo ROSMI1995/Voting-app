@@ -3,13 +3,25 @@
 {% block title %}Homepage{% endblock %}
 
 {% block content %}
-{% for poll in polls %}
-<li class="list-group-item">
-    <strong>{{ poll.question }}</strong>
-    <span class="pull-right">
+
+
+<div class="row">
+    {% for poll in polls %}
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">  <strong>{{ poll.question }}</strong></h5>
+        
+        <span class="pull-right">
         <a href="{% url 'vote' poll.id %}" class="btn btn-info btn-xs">Vote</a> &nbsp;
-        <a href="{% url 'results' poll.id %}" class="btn btn-default btn-xs">View Results</a> &nbsp;
+        <a href="{% url 'results' poll.id %}" class="btn btn-default btn-xs badge badge-ligh">View Results</a> &nbsp;
+        {{poll.name}}
     </span>
-</li>
+      </div>
+    </div><br>
+  </div>
+
+
+
 {% endfor %}
 {% endblock %}
